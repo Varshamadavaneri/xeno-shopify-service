@@ -268,4 +268,30 @@ router.post('/change-password', authenticateToken, [
   }
 });
 
+// @route   POST /api/auth/populate-demo
+// @desc    Populate database with demo data (for production)
+// @access  Public
+router.post('/populate-demo', async (req, res) => {
+  try {
+    const { populateProductionData } = require('../scripts/populateProductionData');
+    await populateProductionData();
+    
+    res.status(200).json({
+      success: true,
+      message: 'Demo data populated successfully',
+      credentials: {
+        email: 'demo@xeno.com',
+        password: 'demo123'
+      }
+    });
+  } catch (error) {
+    console.error('Error populating demo data:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to populate demo data',
+      details: error.message
+    });
+  }
+});
+
 module.exports = router;
