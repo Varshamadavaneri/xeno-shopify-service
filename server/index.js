@@ -85,6 +85,26 @@ async function startServer() {
       console.log('✅ Database synchronized.');
     }
     
+    // Populate demo data in production if database is empty
+    if (process.env.NODE_ENV === 'production') {
+      const { populateProductionData } = require('./scripts/populateProductionData');
+      const { User } = require('./models');
+      
+      // Check if demo user exists, if not populate data
+      try {
+        const user = await User.findOne({ where: { email: 'demo@xeno.com' } });
+        if (!user) {
+          console.log('🚀 No demo data found, populating production database...');
+          await populateProductionData();
+          console.log('✅ Demo data populated successfully!');
+        } else {
+          console.log('✅ Demo data already exists');
+        }
+      } catch (error) {
+        console.error('❌ Error checking/populating demo data:', error);
+      }
+    }
+    
     app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📊 Environment: ${process.env.NODE_ENV || 'development'}`);
