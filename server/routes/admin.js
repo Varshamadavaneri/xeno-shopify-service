@@ -48,4 +48,30 @@ router.post('/reset-demo-user', async (req, res) => {
   }
 });
 
+// TEMP: generate auth token for a user (bypass password) for demo
+router.post('/token', async (req, res) => {
+  try {
+    const provided = req.header('X-Seed-Token');
+    const expected = process.env.ADMIN_SEED_TOKEN;
+    if (!expected || provided !== expected) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    const email = (req.body?.email || 'demo@xeno.com').toLowerCase();
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    const jwt = require('jsonwebtoken');
+    const token = jwt.sign(
+      { userId: user.id },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
+    );
+    return res.json({ success: true, data: { user: user.toJSON(), token } });
+  } catch (error) {
+    console.error('Token issue error:', error);
+    return res.status(500).json({ error: 'Token issue failed', details: String(error.message || error) });
+  }
+});
+
 
