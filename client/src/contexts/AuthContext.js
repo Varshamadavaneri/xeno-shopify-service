@@ -17,6 +17,12 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('token'));
 
+  // Configure axios base URL for production (Render) or fallback to relative in dev
+  // REACT_APP_API_URL is set in render.yaml to the backend URL
+  if (!axios.defaults.baseURL) {
+    axios.defaults.baseURL = process.env.REACT_APP_API_URL || '';
+  }
+
   // Set up axios defaults
   useEffect(() => {
     if (token) {
