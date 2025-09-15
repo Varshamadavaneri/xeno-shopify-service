@@ -4,7 +4,6 @@ const router = express.Router();
 const { sequelize } = require('../config/database');
 const { populateProductionData } = require('../scripts/populateProductionData');
 const { User } = require('../models');
-const bcrypt = require('bcryptjs');
 
 // Simple auth using header token to avoid exposing publicly
 router.post('/seed', async (req, res) => {
@@ -40,8 +39,8 @@ router.post('/reset-demo-user', async (req, res) => {
     if (!user) {
       return res.status(404).json({ error: 'Demo user not found' });
     }
-    const hash = await bcrypt.hash('demo123', 12);
-    await user.update({ password: hash });
+    // Set plain password; model hook will hash once
+    await user.update({ password: 'demo123' });
     return res.json({ success: true, message: 'Demo user password reset' });
   } catch (error) {
     console.error('Reset demo user error:', error);
