@@ -12,6 +12,7 @@ const tenantRoutes = require('./routes/tenants');
 const shopifyRoutes = require('./routes/shopify');
 const insightsRoutes = require('./routes/insights');
 const webhookRoutes = require('./routes/webhooks');
+const adminRoutes = require('./routes/admin');
 const { errorHandler } = require('./middleware/errorHandler');
 const { authenticateToken } = require('./middleware/auth');
 const schedulerService = require('./services/scheduler');
@@ -61,6 +62,7 @@ app.use('/api/tenants', authenticateToken, tenantRoutes);
 app.use('/api/shopify', authenticateToken, shopifyRoutes);
 app.use('/api/insights', authenticateToken, insightsRoutes);
 app.use('/api/webhooks', webhookRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Error handling middleware
 app.use(errorHandler);
