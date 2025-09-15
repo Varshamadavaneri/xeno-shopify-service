@@ -15,7 +15,7 @@
 ## 🎯 **Demo Script (7 Minutes)**
 
 ### **1. Introduction & Problem Statement (1 minute)**
-> **"Hi! I'm Teja Gopal, and I'm excited to present my solution for the Xeno FDE Internship Assignment."**
+> **"Hi! I'm varsha, and I'm excited to present my solution for the Xeno FDE Internship Assignment."**
 
 **Key Points to Cover:**
 - **Problem**: Enterprise retailers need a unified platform to ingest, analyze, and gain insights from their Shopify store data
